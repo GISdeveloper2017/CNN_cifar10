@@ -106,7 +106,7 @@ def prediction(images_input):
     saver=tf.train.Saver()
 
 
-    saver.restore(sess,"/home/zx/cifar10.ckpt")
+    saver.restore(sess,"/Users/zhangxu/Downloads/cifar-10-batches-bin/cifar10.ckpt")
     print "laod weights"
 
 
@@ -126,7 +126,11 @@ def prediction(images_input):
     return  result_label
 
 labels_input,images_input,beofre_process=get_data.get_test_set()
-get_data.display(beofre_process)
+#get_data.display(beofre_process)
+
+print len(beofre_process)
+print len(labels_input)
+
 result_label=prediction(images_input)
 accuracy=compute_accuracy(result_label,labels_input)
 

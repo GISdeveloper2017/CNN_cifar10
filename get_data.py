@@ -1,5 +1,5 @@
 #coding:utf-8
-import Image
+import image as Image
 import numpy as np
 from scipy.misc import imsave
 import struct
@@ -31,13 +31,13 @@ def get_data():
     labels=[]
     images=[]
 
-    # for i in range(file_num,file_num+1):
-    #     print("start read:" + str(file_num))
-    #     f=open("/tmp/cifar10_data/cifar-10-batches-bin/data_batch_" + str(i) + ".bin", 'rb')
+    # for i in range(1,file_num+1):
+    #     print("start read:" + str(i))
+    #     f=open("/Users/zhangxu/Downloads/cifar-10-batches-bin/data_batch_" + str(i) + ".bin", 'rb')
     #     bytes=f.read()
     #     files.append(bytes)
     #     f.close()
-    f=open("/tmp/cifar10_data/cifar-10-batches-bin/test_batch.bin",'rb')
+    f=open("/Users/zhangxu/Downloads/cifar-10-batches-bin/test_batch.bin",'rb')
     files.append(f.read())
     f.close()
 
@@ -76,7 +76,7 @@ def get_data():
 
 def get_test_set():
     print "start read test set"
-    img_num = 100# 没个文件读取的图片数
+    img_num = 10000# 没个文件读取的图片数
     pic_width = 32
     pic_height = 32
     files = []
@@ -84,7 +84,7 @@ def get_test_set():
     images = []
 
 
-    f=open("/tmp/cifar10_data/cifar-10-batches-bin/test_batch.bin",'rb')
+    f=open("/Users/zhangxu/Downloads/cifar-10-batches-bin/test_batch.bin",'rb')
     files.append(f.read())
     f.close()
 
@@ -115,6 +115,7 @@ def get_test_set():
     images=[]
 
     befor_process=imgs[:]
+
     for i in range(0,len(imgs)):
         imgs[i]=process(imgs[i])
     print 'end process'
@@ -127,10 +128,12 @@ def display(images):
         for j in range(1,len(images)):
             line.extend(images[j][i])
         img.append(line)
-    imsave("test_set.jpg",img)
-    a=Image.open("test_set.jpg")
-    a.show()
+    imsave("test_set1.jpg",img)
 
+
+    # a=Image.open("test_set.jpg")
+    # a.show()
+    #失效的包
 def get_class(labels):
     cls=[]
     for i in labels:

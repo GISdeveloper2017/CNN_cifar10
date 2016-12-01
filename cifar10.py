@@ -25,6 +25,10 @@ def getnext(start,end,input_images,input_labels):
 
 learing_rate=0.001
 labels_input,images_input=get_data.get_data()
+print len(labels_input)
+print 'end read'
+
+
 varable_list=[]
 #用tf处理的数值类型最好都是numpy.float32，有些数值处理器来容易产生异常
 
@@ -39,7 +43,7 @@ labels= tf.placeholder("float", shape=[None, 10])
 
 w_conv1=weight_variable([5,5,3,64])
 b_conv1=bias_variable([64])
-h_conv1=tf.nn.relu(tf.nn.conv2d(images, w_conv1,[1,1,1,1],padding='SAME')+ b_conv1)
+h_conv1=tf.nn.relu(tf.nn.conv2d(images, w_conv1,[1,1,1,1],padding='SAME')+ b_conv1)# 24*24*64
 varable_list.append(w_conv1)
 varable_list.append(b_conv1)
 
@@ -47,7 +51,7 @@ varable_list.append(b_conv1)
 
 #池化1，正规化
 h_pool1 = tf.nn.max_pool(h_conv1, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1],padding='SAME')
-h_norm1 = tf.nn.lrn(h_pool1, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,name='norm1') #16*16*64
+h_norm1 = tf.nn.lrn(h_pool1, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,name='norm1') #12*12*64
 
 #卷积2
 w_conv2=weight_variable([5,5,64,64])
@@ -57,7 +61,7 @@ h_conv2= (tf.nn.conv2d(h_norm1, w_conv2, [1, 1, 1, 1], padding='SAME')+b_conv2)
 
 #池化正规化2
 h_norm2 = tf.nn.lrn(h_conv2, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,name='norm2')
-h_pool2 = tf.nn.max_pool(h_norm2, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1], padding='SAME', name='pool2')#8*8*64
+h_pool2 = tf.nn.max_pool(h_norm2, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1], padding='SAME', name='pool2')#6*6*64
 varable_list.append(w_conv2)
 varable_list.append(b_conv2)
 
@@ -115,18 +119,13 @@ w_end=len(labels_input)/step_length
 
 
 
-saver.restore(sess,"/home/zx/cifar10.ckpt")
+saver.restore(sess,"/Users/zhangxu/Downloads/cifar-10-batches-bin/cifar10.ckpt")
 print "laod weights"
 
-# for i in varable_list:
-#     a=sess.run(i)
-#     print a
-# print "end load weights"
-
-#sess.run(tf.initialize_all_variables())#初始化变量
+#sess.run(tf.initialize_all_variables())#初始化变量,当从硬盘导入的时候不需要执行。
 
 
-for j in range(0,1):
+for j in range(0,10):
     for w in range(0,w_end):
         temp_images,temp_labels=getnext(start,end,images_input,labels_input)
         a,b=sess.run([cost,train_step], feed_dict={images: temp_images, labels: temp_labels})
@@ -139,7 +138,7 @@ for j in range(0,1):
         if(a<1):
             learing_rate=0.00001
         if (j*w_end+w+1)%50==0:
-            savepath=saver.save(sess, "/home/zx/cifar10.ckpt")
+            savepath=saver.save(sess, "/Users/zhangxu/Downloads/cifar-10-batches-bin/cifar10.ckpt")
             print "save at:"+savepath
         start+=step_length
         end+=step_length
